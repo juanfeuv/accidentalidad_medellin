@@ -1,5 +1,4 @@
 import Box from '@mui/material/Box';
-import LinearProgress from '@mui/material/LinearProgress';
 import Modal from '@mui/material/Modal';
 import React from 'react';
 import Typography from '@mui/material/Typography';
