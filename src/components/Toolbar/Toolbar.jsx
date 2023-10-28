@@ -40,7 +40,7 @@ function DrawerAppBar() {
             </Typography>
             <Button color="inherit" href="https://github.com/juanfeuv/accidentalidad_medellin" target="_blank" rel="noreferrer">Repositorio</Button>
             <Button color="inherit" href="./informe.html" target="_blank" rel="noreferrer">Reporte</Button>
-            <Button color="inherit" href="https://youtu.be/yLuoTi10vbY" target="_blank" rel="noreferrer">Video</Button>
+            <Button color="inherit" href="https://www.youtube.com/watch?v=Y1YzzD0DppE" target="_blank" rel="noreferrer">Video</Button>
             <ClickAwayListener onClickAway={handleTooltipClose}>
               <div>
                 <Tooltip
