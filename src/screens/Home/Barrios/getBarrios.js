@@ -28,13 +28,17 @@ const getBarrios = (query = {}) => {
     return [];
   }
 
-  const { year, clase, gravedad } = query;
+  const { fechaInicial, fechaFinal, clase, gravedad } = query;
 
   return data.map(item => {
     const { properties } = item;
 
     const accd = (grouped[Number(item.code) || item.code] || [])
-      .filter(acc => acc.clase === _.lowerCase(clase?.value) && acc.year === year?.value && acc.gravedad_accidente === gravedad?.value);
+      .filter(acc => acc.clase === _.lowerCase(clase?.value)
+        && acc.day >= fechaInicial
+        && acc.day <= fechaFinal
+        && acc.gravedad_accidente === gravedad?.value);
+        
     const cantidad = accd.length || 0;
 
     return {

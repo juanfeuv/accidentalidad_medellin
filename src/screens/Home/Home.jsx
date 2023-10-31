@@ -2,8 +2,8 @@ import ArrowRightAltIcon from '@mui/icons-material/ArrowRightAlt';
 import FilterListIcon from '@mui/icons-material/FilterList';
 import Grid from '@mui/material/Grid';
 import IconButton from '@mui/material/IconButton';
-import LocationSearchingIcon from '@mui/icons-material/LocationSearching';
-import PublicIcon from '@mui/icons-material/Public';
+import BatchPredictionIcon from '@mui/icons-material/BatchPrediction';
+import OnlinePredictionIcon from '@mui/icons-material/OnlinePrediction';
 import React, { useState } from "react";
 import Tooltip from '@mui/material/Tooltip';
 import Accordion from '@mui/material/Accordion';
@@ -33,7 +33,7 @@ const Home = () => {
               aria-controls="panel1a-content"
               id="panel1a-header"
             >
-              <PublicIcon />
+              <OnlinePredictionIcon />
               <Typography>Predicción por comunas</Typography>
             </AccordionSummary>
             <AccordionDetails>
@@ -61,7 +61,7 @@ const Home = () => {
               aria-controls="panel2a-content"
               id="panel2a-header"
             >
-              <LocationSearchingIcon />
+              <BatchPredictionIcon />
               <Typography>Agrupamiento por Barrios</Typography>
             </AccordionSummary>
             <AccordionDetails>

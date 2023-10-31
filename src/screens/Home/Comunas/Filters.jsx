@@ -13,11 +13,21 @@ import Typography from '@mui/material/Typography';
 import getAccidentes from './getAccidentes';
 import SideModal from '../../../components/SideModal';
 
+function getCurrentDateFormatted() {
+  const currentDate = new Date();
+  const year = currentDate.getFullYear();
+  const month = String(currentDate.getMonth() + 1).padStart(2, '0');
+  const day = String(currentDate.getDate()).padStart(2, '0');
+  return `${year}-${month}-${day}`;
+}
+
+
 const INITIAL_DATE = '2014-07-04';
 
 const DEFAULT_FORM = {
   clase: null,
-  fecha: '',
+  fechaInicial: getCurrentDateFormatted(),
+  fechaFinal: getCurrentDateFormatted()
 };
 
 const Filters = ({ open, setOpen, getRawAccidents }) => {
@@ -72,17 +82,32 @@ const Filters = ({ open, setOpen, getRawAccidents }) => {
         </Grid>
         <br />
         <Grid container spacing={5}>
-          <Grid item xs={12}>
-            <Typography gutterBottom>Fecha *</Typography>
+          <Grid item xs={12} md={6}>
+            <Typography gutterBottom>Fecha Inicial*</Typography>
             <TextField
               type="date"
               fullWidth
-              name='fecha'
+              name='fechaInicial'
               required
               onChange={handlechange}
-              value={form?.fecha}
+              value={form?.fechaInicial}
               inputProps={{
-                min: INITIAL_DATE
+                min: INITIAL_DATE,
+                max: form?.fechaFinal
+              }}
+            />
+          </Grid>
+          <Grid item xs={12} md={6}>
+            <Typography gutterBottom>Fecha Final*</Typography>
+            <TextField
+              type="date"
+              fullWidth
+              name='fechaFinal'
+              required
+              onChange={handlechange}
+              value={form?.fechaFinal}
+              inputProps={{
+                min: form?.fechaInicial || INITIAL_DATE
               }}
             />
           </Grid>
@@ -101,7 +126,7 @@ const Filters = ({ open, setOpen, getRawAccidents }) => {
               variant="contained"
               color="success"
               onClick={search}
-              disabled={_.isEmpty(form?.clase) || _.isEmpty(form?.fecha)}
+              disabled={_.isEmpty(form?.clase) || _.isEmpty(form?.fechaInicial) || _.isEmpty(form?.fechaFinal)}
             >
               Buscar
             </Button>

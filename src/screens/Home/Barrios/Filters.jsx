@@ -8,20 +8,21 @@ import PropTypes from 'prop-types';
 import React, { useState, useEffect } from "react";
 import Select from 'react-select'
 import Typography from '@mui/material/Typography';
+import TextField from '@mui/material/TextField';
 
 import SideModal from '../../../components/SideModal';
 import getGravedades from './getGravedades';
 import getAccidentes from '../Comunas/getAccidentes';
 
 const DEFAULT_FORM = {
-  year: null,
+  fechaInicial: '2014-07-04',
+  fechaFinal: '2020-12-31',
   clase: null,
   gravedad: null,
 };
 
-const YEARS = [
-  2014, 2015, 2016, 2017, 2018, 2019, 2020
-].map(item => ({ value: item, label: item }));
+const INITIAL_DATE = '2014-07-04';
+const END_DATE = '2020-12-31';
 
 const Filters = ({ open, setOpen, getRawAccidents }) => {
   const [form, setForm] = useState(DEFAULT_FORM);
@@ -74,6 +75,36 @@ const Filters = ({ open, setOpen, getRawAccidents }) => {
         </Grid>
         <br />
         <Grid container spacing={5}>
+        <Grid item xs={12} md={6}>
+            <Typography gutterBottom>Fecha Inicial*</Typography>
+            <TextField
+              type="date"
+              fullWidth
+              name='fechaInicial'
+              required
+              onChange={handlechange}
+              value={form?.fechaInicial}
+              inputProps={{
+                min: INITIAL_DATE,
+                max: form?.fechaFinal
+              }}
+            />
+          </Grid>
+          <Grid item xs={12} md={6}>
+            <Typography gutterBottom>Fecha Final*</Typography>
+            <TextField
+              type="date"
+              fullWidth
+              name='fechaFinal'
+              required
+              onChange={handlechange}
+              value={form?.fechaFinal}
+              inputProps={{
+                min: form?.fechaInicial || INITIAL_DATE,
+                MAX: END_DATE
+              }}
+            />
+          </Grid>
           <Grid item xs={12}>
             <Typography gutterBottom>Clase de Accidente *</Typography>
             <Select
@@ -94,21 +125,12 @@ const Filters = ({ open, setOpen, getRawAccidents }) => {
               required
             />
           </Grid>
-          <Grid item xs={12}>
-            <Typography gutterBottom>Año *</Typography>
-            <Select
-              name='year'
-              value={form?.year}
-              onChange={changeSelect('year')}
-              options={YEARS}
-            />
-          </Grid>
           <Grid item xs={12} style={{ textAlign: 'right' }}>
             <Button
               variant="contained"
               color="success"
               onClick={search}
-              disabled={_.isEmpty(form?.clase) || _.isEmpty(form?.year) || _.isEmpty(form?.gravedad)}
+              disabled={_.isEmpty(form?.clase) || _.isEmpty(form?.fechaInicial) || _.isEmpty(form?.fechaFinal) || _.isEmpty(form?.gravedad)}
             >
               Buscar
             </Button>

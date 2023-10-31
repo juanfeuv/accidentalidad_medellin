@@ -8,6 +8,31 @@ import Comunas from '../../../Assets/comunas.json';
 
 const INITIAL_DATE = moment('2014-07-04', "YYYY-MM-DD");
 
+const convertToNumber = (num) => Number(num) || 0;
+
+const groupGuantities = (listOfLists) => {
+  // Initialize an object to store the grouped and summed quantities
+  const groupedQuantities = {};
+
+  // Iterate through the list of lists and aggregate quantities by name
+  listOfLists.forEach(innerList => {
+    innerList.forEach(item => {
+      const { name, ...rest } = item;
+      if (groupedQuantities[name]) {
+        const newElem = _.cloneDeep(groupedQuantities[name]);
+        newElem.properties.percentile = convertToNumber(newElem.properties.percentile) + convertToNumber(rest?.properties?.percentile);
+        newElem.properties.value = convertToNumber(newElem.properties.value) + convertToNumber(rest?.properties?.value);
+        groupedQuantities[name] = newElem;
+      } else {
+        groupedQuantities[name] = { name, ...rest };
+      }
+    });
+  });
+
+  // Convert the groupedQuantities object into an array of objects
+  return Object.keys(groupedQuantities).map(name => groupedQuantities[name]);
+};
+
 const fixDayWeek = (day) => {
   const subs = day - 1;
 
@@ -125,12 +150,26 @@ const updatePercentiles = (featureCollection) => {
   });
 }
 
-const predict = async (query) => {
-  const { clase, fecha } = query;
+function formatDate(date) {
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are 0-indexed
+  const day = String(date.getDate()).padStart(2, '0');
+  return `${year}-${month}-${day}`;
+}
 
-  // load model
-  const model = await tf.loadLayersModel('/model.json');
+function getDates(startDate, endDate) {
+  const dateList = [];
+  let currentDate = new Date(startDate);
 
+  while (currentDate <= endDate) {
+    dateList.push(formatDate(currentDate));
+    currentDate.setDate(currentDate.getDate() + 1);
+  }
+
+  return dateList;
+}
+
+const prediction_per_date = async (model, fecha, clase) => {
   const date = moment(fecha, "YYYY-MM-DD");
   const hd = new Holidays('CO');
   const holiday = Number(hd.isHoliday(fecha));
@@ -153,7 +192,6 @@ const predict = async (query) => {
   // prediction
   const prediction = await model.predict(data).array();
 
-
   return rawComunas.map((item, index) => {
     const { properties, ...rest } = item;
 
@@ -168,6 +206,27 @@ const predict = async (query) => {
       }
     };
   })
+};
+
+const predict = async (query) => {
+  const { clase, fechaInicial, fechaFinal } = query;
+
+  // load model
+  const model = await tf.loadLayersModel('/model.json');
+
+  const startDate = new Date(fechaInicial);
+  const endDate = new Date(fechaFinal);
+  const dateRange = getDates(startDate, endDate);
+
+  const results = dateRange.map(async (current) => {
+    const comunas_predicted = await prediction_per_date(model, current, clase);
+
+    return comunas_predicted;
+  });
+
+  const waitedPromises = await Promise.all(results);
+
+  return groupGuantities(waitedPromises);
 };
 
 
