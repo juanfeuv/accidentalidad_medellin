@@ -18,9 +18,7 @@ const Comunas = ({ open, setOpen }) => {
 
     const res = await getComunas(query);
 
-    console.log("res.prediction", res.prediction);
-
-    setList(res.prediction);
+    setList(res.prediction || []);
     setIsLoading(false);
 
     return res;
