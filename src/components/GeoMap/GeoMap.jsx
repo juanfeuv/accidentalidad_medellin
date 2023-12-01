@@ -11,6 +11,8 @@ const MAPBOX_TOKEN = 'pk.eyJ1IjoianVzdWdhdiIsImEiOiJjbGFxN28wc3YxZzl0M3JtaTUyb21
 const GeoMap = ({ data }) => {
   const [hoverInfo, setHoverInfo] = useState(null);
 
+  console.log("data", data);
+
   const onHover = useCallback(event => {
     const {
       features,

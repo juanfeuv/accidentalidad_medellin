@@ -28,7 +28,7 @@ const getBarrios = (query = {}) => {
     return [];
   }
 
-  const { fechaInicial, fechaFinal, clase, gravedad } = query;
+  const { fechaInicial, fechaFinal, clase } = query;
 
   return data.map(item => {
     const { properties } = item;
@@ -36,8 +36,7 @@ const getBarrios = (query = {}) => {
     const accd = (grouped[Number(item.code) || item.code] || [])
       .filter(acc => acc.clase === _.lowerCase(clase?.value)
         && acc.day >= fechaInicial
-        && acc.day <= fechaFinal
-        && acc.gravedad_accidente === gravedad?.value);
+        && acc.day <= fechaFinal);
         
     const cantidad = accd.length || 0;
 

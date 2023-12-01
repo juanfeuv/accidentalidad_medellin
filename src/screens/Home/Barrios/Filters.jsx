@@ -18,7 +18,6 @@ const DEFAULT_FORM = {
   fechaInicial: '2014-07-04',
   fechaFinal: '2020-12-31',
   clase: null,
-  gravedad: null,
 };
 
 const INITIAL_DATE = '2014-07-04';
@@ -115,7 +114,7 @@ const Filters = ({ open, setOpen, getRawAccidents }) => {
               required
             />
           </Grid>
-          <Grid item xs={12}>
+          {/* <Grid item xs={12}>
             <Typography gutterBottom>Gravedad *</Typography>
             <Select
               name='gravedad'
@@ -124,13 +123,13 @@ const Filters = ({ open, setOpen, getRawAccidents }) => {
               options={gravedades}
               required
             />
-          </Grid>
+          </Grid> */}
           <Grid item xs={12} style={{ textAlign: 'right' }}>
             <Button
               variant="contained"
               color="success"
               onClick={search}
-              disabled={_.isEmpty(form?.clase) || _.isEmpty(form?.fechaInicial) || _.isEmpty(form?.fechaFinal) || _.isEmpty(form?.gravedad)}
+              disabled={_.isEmpty(form?.clase) || _.isEmpty(form?.fechaInicial) || _.isEmpty(form?.fechaFinal)}
             >
               Buscar
             </Button>

@@ -30,7 +30,7 @@ const DEFAULT_FORM = {
   fechaFinal: getCurrentDateFormatted()
 };
 
-const Filters = ({ open, setOpen, getRawAccidents }) => {
+const Filters = ({ open, setOpen, getRawAccidents, setAccidentesPorDia, setTabla }) => {
   const [form, setForm] = useState(DEFAULT_FORM);
   const [accidentes, setAccidentes] = useState([]);
 
@@ -53,7 +53,10 @@ const Filters = ({ open, setOpen, getRawAccidents }) => {
   const search = async () => {
     const res = await getRawAccidents(form);
 
-    const totalAccidentes = _.sumBy(res, item => item.properties.value);
+    const totalAccidentes = _.sumBy(res.prediction, item => item.properties.value);
+    const rawAccidentesPorDia = res.rawDays.map(date => ({date: date.date,  value: _.sumBy(date.prediction, row => row.properties.value || 0) }));
+    setAccidentesPorDia(rawAccidentesPorDia);
+    setTabla(true);
 
     toast.success(`${totalAccidentes} accidentes proyectados en Medellín`);
     handleClose();
@@ -149,6 +152,8 @@ Filters.propTypes = {
   open: PropTypes.bool.isRequired,
   setOpen: PropTypes.func.isRequired,
   getRawAccidents: PropTypes.func.isRequired,
+  setAccidentesPorDia: PropTypes.func.isRequired,
+  setTabla: PropTypes.func.isRequired,
 };
 
 export default Filters;
