@@ -5,17 +5,20 @@ import Filters from './Filters';
 import GeoMap from '../../../components/GeoMap/GeoMap';
 import getComunas from './getComunas';
 import Loading from '../../../components/Loading';
+import Tabla from './Tabla';
 
 const Comunas = ({ open, setOpen }) => {
   const [list, setList] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [accidentesPorDia, setAccidentesPorDia] = useState([]);
+  const [tabla, setTabla] = useState(false);
 
   const getData = async (query) => {
     setIsLoading(true);
 
     const res = await getComunas(query);
 
-    setList(res);
+    setList(res.prediction || []);
     setIsLoading(false);
 
     return res;
@@ -33,8 +36,15 @@ const Comunas = ({ open, setOpen }) => {
         open={open}
         setOpen={setOpen}
         getRawAccidents={getData}
+        setAccidentesPorDia={setAccidentesPorDia}
+        setTabla={setTabla}
       />
       <Loading open={isLoading} />
+      <Tabla
+        data={accidentesPorDia}
+        handleClose={() => setTabla(false)}
+        open={tabla}
+      />
     </div>
   );
 }

@@ -218,15 +218,16 @@ const predict = async (query) => {
   const endDate = new Date(fechaFinal);
   const dateRange = getDates(startDate, endDate);
 
-  const results = dateRange.map(async (current) => {
+  const predicts = [];
+  const results = [];
+
+  for (const current of dateRange) {
     const comunas_predicted = await prediction_per_date(model, current, clase);
+    predicts.push(comunas_predicted);
+    results.push({ date: current, prediction: comunas_predicted });
+  }
 
-    return comunas_predicted;
-  });
-
-  const waitedPromises = await Promise.all(results);
-
-  return groupGuantities(waitedPromises);
+  return { rawDays: results, prediction: groupGuantities(predicts) };
 };
 
 

@@ -14,10 +14,13 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 
 import Barrios from './Barrios/Barrios';
 import Comunas from './Comunas/Comunas';
+import Instrucciones from './Instrucciones';
+
 
 const Home = () => {
   const [expanded, setExpanded] = useState(0);
   const [open, setOpen] = useState(false);
+  const [tour, setTour] = useState(true);
 
   const handleChange = (panel) => (event, isExpanded) => {
     setExpanded(panel);
@@ -85,6 +88,7 @@ const Home = () => {
           </Accordion>
         </Grid>
       </Grid>
+      <Instrucciones open={tour} handleClose={() => setTour(false)} />
     </div>
   );
 }

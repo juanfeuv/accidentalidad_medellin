@@ -9,6 +9,8 @@ import Typography from '@mui/material/Typography';
 
 import { Outlet } from 'react-router-dom';
 
+import Instrucciones from '../../screens/Home/Instrucciones';
+
 const TOOLTIP_CONTENT = (
   <ul>
     <li>Cristian Jaramillo Herrera</li>
@@ -20,6 +22,7 @@ const TOOLTIP_CONTENT = (
 
 function DrawerAppBar() {
   const [open, setOpen] = useState(false);
+  const [tour, setTour] = useState(false);
 
   const handleTooltipClose = () => {
     setOpen(false);
@@ -38,6 +41,7 @@ function DrawerAppBar() {
             <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
               Accidentalidad en Medellin
             </Typography>
+            <Button color="inherit" onClick={() => setTour(true)}>Instrucciones de uso</Button>
             <Button color="inherit" href="https://github.com/juanfeuv/accidentalidad_medellin" target="_blank" rel="noreferrer">Repositorio</Button>
             <Button color="inherit" href="./informe.html" target="_blank" rel="noreferrer">Reporte</Button>
             <Button color="inherit" href="https://www.youtube.com/watch?v=t9REbvpDm30" target="_blank" rel="noreferrer">Video</Button>
@@ -64,6 +68,7 @@ function DrawerAppBar() {
       <div style={{ padding: '10px' }}>
         <Outlet />
       </div>
+      <Instrucciones open={tour} handleClose={() => setTour(false)} />
     </>
   );
 }
