@@ -131,8 +131,8 @@ const generateDay = (day) => {
   return initialArray;
 };
 
-const updatePercentiles = (featureCollection) => {
-  const { features = [] } = featureCollection;
+export const updatePercentiles = () => {
+  const { features = [] } = Comunas;
 
   return features.map((f) => {
     return {
@@ -170,42 +170,47 @@ function getDates(startDate, endDate) {
 }
 
 const prediction_per_date = async (model, fecha, clase) => {
-  const date = moment(fecha, "YYYY-MM-DD");
-  const hd = new Holidays('CO');
-  const holiday = Number(hd.isHoliday(fecha));
-  const rawComunas = updatePercentiles(Comunas);
-  const dayWeek = fixDayWeek(date.day());
-  const dateSplited = fecha.split('-');
+  return tf.tidy(() => {
+    // ... (existing code)
+    const date = moment(fecha, "YYYY-MM-DD");
+    const hd = new Holidays('CO');
+    const holiday = Number(hd.isHoliday(fecha));
+    const rawComunas = updatePercentiles();
+    const dayWeek = fixDayWeek(date.day());
+    const dateSplited = fecha.split('-');
 
-  const tensorData = rawComunas.map(item => [
-    date.diff(INITIAL_DATE, 'months', false),
-    ...generateAccidenteArray(clase?.value),
-    ...generateComunaArray(item.code),
-    holiday,
-    ...generateDayOfWeek(dayWeek),
-    ...generateMonth(Number(dateSplited[1])),
-    ...generateDay(Number(dateSplited[2]))
-  ]);
+    const tensorData = rawComunas.map(item => [
+      date.diff(INITIAL_DATE, 'months', false),
+      ...generateAccidenteArray(clase?.value),
+      ...generateComunaArray(item.code),
+      holiday,
+      ...generateDayOfWeek(dayWeek),
+      ...generateMonth(Number(dateSplited[1])),
+      ...generateDay(Number(dateSplited[2]))
+    ]);
 
-  const data = tf.tensor(tensorData);
+    const data = tf.tensor(tensorData);
 
-  // prediction
-  const prediction = await model.predict(data).array();
+    // prediction
+    const prediction = model.predict(data).arraySync(); // Use arraySync to convert to a regular JavaScript array
 
-  return rawComunas.map((item, index) => {
-    const { properties, ...rest } = item;
+    // No need to manually dispose of the tensor when using tf.tidy
 
-    const cantidad = _.round(prediction[index][0], 0);
-
-    return {
-      ...rest,
-      properties: {
-        ...properties,
-        percentile: cantidad,
-        value: cantidad,
-      }
-    };
-  })
+    return rawComunas.map((item, index) => {
+      const { properties, geometry, ...rest } = item;
+  
+      const cantidad = _.round(prediction[index][0], 0);
+  
+      return {
+        ...rest,
+        properties: {
+          ...properties,
+          percentile: cantidad,
+          value: cantidad,
+        }
+      };
+    })
+  });
 };
 
 const predict = async (query) => {

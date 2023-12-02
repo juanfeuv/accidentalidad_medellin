@@ -8,7 +8,7 @@ import { dataLayer } from './map-style';
 
 const MAPBOX_TOKEN = 'pk.eyJ1IjoianVzdWdhdiIsImEiOiJjbGFxN28wc3YxZzl0M3JtaTUyb21wOGFtIn0.j5-unL3t1TDt11kCSI1_WA'; // Set your mapbox token here
 
-const GeoMap = ({ data }) => {
+const GeoMap = ({ data, name, styles = dataLayer }) => {
   const [hoverInfo, setHoverInfo] = useState(null);
 
   const onHover = useCallback(event => {
@@ -39,11 +39,11 @@ const GeoMap = ({ data }) => {
           type="geojson"
           data={{ type: 'FeatureCollection', features: data }}
         >
-          <Layer {...dataLayer} />
+          <Layer {...styles} />
         </Source>
         {hoverInfo && (
           <div className="tooltip" style={{ left: hoverInfo.x, top: hoverInfo.y }}>
-            <div>Comuna: {hoverInfo.feature.properties.name}</div>
+            <div>{name}: {hoverInfo.feature.properties.name}</div>
             <div>Cantidad: {hoverInfo.feature.properties.value}</div>
           </div>
         )}

@@ -1,5 +1,6 @@
 import _ from 'lodash';
 
+
 import { toast } from 'react-toastify';
 
 import Button from '@mui/material/Button';
@@ -20,7 +21,6 @@ function getCurrentDateFormatted() {
   const day = String(currentDate.getDate()).padStart(2, '0');
   return `${year}-${month}-${day}`;
 }
-
 
 const INITIAL_DATE = '2014-07-04';
 

@@ -11,6 +11,8 @@ import AccordionSummary from '@mui/material/AccordionSummary';
 import AccordionDetails from '@mui/material/AccordionDetails';
 import Typography from '@mui/material/Typography';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import TableViewIcon from '@mui/icons-material/TableView';
+import GroupWorkSharpIcon from '@mui/icons-material/GroupWorkSharp';
 
 import Barrios from './Barrios/Barrios';
 import Comunas from './Comunas/Comunas';
@@ -21,6 +23,8 @@ const Home = () => {
   const [expanded, setExpanded] = useState(0);
   const [open, setOpen] = useState(false);
   const [tour, setTour] = useState(true);
+  const [tabla, setTabla] = useState(false);
+  const [grupos, setGrupos] = useState(false);
 
   const handleChange = (panel) => (event, isExpanded) => {
     setExpanded(panel);
@@ -42,7 +46,7 @@ const Home = () => {
             <AccordionDetails>
               <Grid container alignItems="center">
                 <Grid item xs={12}>
-                  <span class="toto">
+                  <span className="toto">
                     <span>No se preocupe si ve el mapa vacio, por favor aplique primero filtros:</span>
                   </span>
                   <IconButton disableRipple>
@@ -53,9 +57,14 @@ const Home = () => {
                       <FilterListIcon />
                     </IconButton>
                   </Tooltip>
+                  <Tooltip title="Abrir tabla de frequencias">
+                    <IconButton onClick={() => setTabla(true)} color="primary">
+                      <TableViewIcon />
+                    </IconButton>
+                  </Tooltip>
                 </Grid>
               </Grid>
-              {expanded === 0 && <Comunas open={open} setOpen={setOpen} />}
+              {expanded === 0 && <Comunas open={open} setOpen={setOpen} tabla={tabla} setTabla={setTabla} />}
             </AccordionDetails>
           </Accordion>
           <Accordion expanded={expanded === 1} onChange={handleChange(1)}>
@@ -70,7 +79,7 @@ const Home = () => {
             <AccordionDetails>
               <Grid container alignItems="center">
                 <Grid item xs={12}>
-                  <span class="toto">
+                  <span className="toto">
                     <span>No se preocupe si ve el mapa vacio, por favor aplique primero filtros:</span>
                   </span>
                   <IconButton disableRipple>
@@ -81,9 +90,14 @@ const Home = () => {
                       <FilterListIcon />
                     </IconButton>
                   </Tooltip>
+                  <Tooltip title="Informacion de grupos">
+                    <IconButton onClick={() => setGrupos(true)} color="primary">
+                      <GroupWorkSharpIcon />
+                    </IconButton>
+                  </Tooltip>
                 </Grid>
               </Grid>
-              {expanded === 1 && <Barrios open={open} setOpen={setOpen} />}
+              {expanded === 1 && <Barrios open={open} setOpen={setOpen} grupos={grupos} setGrupos={setGrupos} />}
             </AccordionDetails>
           </Accordion>
         </Grid>
