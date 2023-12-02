@@ -11,7 +11,6 @@ import Typography from '@mui/material/Typography';
 import TextField from '@mui/material/TextField';
 
 import SideModal from '../../../components/SideModal';
-import getGravedades from './getGravedades';
 import getAccidentes from '../Comunas/getAccidentes';
 
 const DEFAULT_FORM = {
@@ -26,7 +25,6 @@ const END_DATE = '2020-12-31';
 const Filters = ({ open, setOpen, getRawAccidents }) => {
   const [form, setForm] = useState(DEFAULT_FORM);
   const [accidentes, setAccidentes] = useState([]);
-  const [gravedades, setGravedades] = useState([]);
 
   const handleClose = () => setOpen(false);
 
@@ -58,7 +56,6 @@ const Filters = ({ open, setOpen, getRawAccidents }) => {
 
   useEffect(() => {
     setAccidentes(getAccidentes());
-    setGravedades(getGravedades());
     // eslint-disable-next-line
   }, []);
 
